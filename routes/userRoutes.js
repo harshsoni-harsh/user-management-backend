@@ -138,6 +138,7 @@
  */
 
 const express = require("express");
+let bcrypt = require("bcrypt");
 const router = express.Router();
 const User = require("../models/user");
 const authenticateToken = require("../middlewares/authMiddleware");
@@ -154,9 +155,12 @@ router.post("/user", authenticateToken, async (req, res) => {
   if (userDetails) {
     let { name, role, email, password } = userDetails;
     if (name && email && password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
       let userExists = await User.find({ email });
       if (userExists.length === 0) {
-        let rep = await User.insertMany([{ name, role, email, password }]);
+        let rep = await User.insertMany([
+          { name, role, email, password: hashedPassword },
+        ]);
       } else {
         res
           .status(409)
@@ -197,9 +201,13 @@ router.patch("/user/:id", authenticateToken, async (req, res) => {
   } else {
     try {
       const { name, role, email, password } = userDetails;
+      let hashedPassword;
+      if (password) {
+        hashedPassword = bcrypt.hash(password, 10);
+      }
       let user = await User.findOneAndUpdate(
         { _id: id },
-        { name, role, email, password }
+        { name, role, email, password: hashedPassword }
       );
       res.send("User details updated successfully");
     } catch {

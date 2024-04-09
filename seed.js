@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const dbConnect = require("./config/dbConnect");
+const bcrypt = require("bcrypt");
 
 dbConnect();
 
@@ -36,9 +37,20 @@ const seedUsers = [
   },
 ];
 
+async function hashPasswords() {
+  const hashedUserData = await Promise.all(
+    seedUsers.map(async (user) => ({
+      ...user,
+      password: await bcrypt.hash(user.password, 10),
+    }))
+  );
+  return hashedUserData;
+}
+
 const seedDB = async () => {
+  const updatedUserDetails = await hashPasswords();
   await User.deleteMany({});
-  await User.insertMany(seedUsers);
+  await User.insertMany(updatedUserDetails);
   console.log("Data seeded successfully");
 };
 
