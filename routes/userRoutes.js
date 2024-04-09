@@ -142,11 +142,13 @@ const router = express.Router();
 const User = require("../models/user");
 const authenticateToken = require("../middlewares/authMiddleware");
 
+// GET
 router.get("/users", authenticateToken, async (req, res) => {
   const users = await User.find({});
   res.send(users);
 });
 
+// POST
 router.post("/user", authenticateToken, async (req, res) => {
   const { userDetails } = req.body;
   if (userDetails) {
@@ -155,7 +157,6 @@ router.post("/user", authenticateToken, async (req, res) => {
       let userExists = await User.find({ email });
       if (userExists.length === 0) {
         let rep = await User.insertMany([{ name, role, email, password }]);
-        console.log(rep);
       } else {
         res
           .status(409)
@@ -176,6 +177,7 @@ router.post("/user", authenticateToken, async (req, res) => {
   }
 });
 
+// GET (by id)
 router.get("/user/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
   try {
@@ -186,6 +188,7 @@ router.get("/user/:id", authenticateToken, async (req, res) => {
   }
 });
 
+// PATCH (by id)
 router.patch("/user/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
   const { userDetails } = req.body;
@@ -205,6 +208,7 @@ router.patch("/user/:id", authenticateToken, async (req, res) => {
   }
 });
 
+// DELETE (by id)
 router.delete("/user/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
   const { deletedCount } = await User.deleteOne({ _id: id });

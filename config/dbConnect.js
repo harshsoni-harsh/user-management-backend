@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("dotenv").config({path: '.env.local'});
 
 module.exports = async () => {
   const uri = process.env.MONGODB_URI;
@@ -8,6 +9,6 @@ module.exports = async () => {
       console.log("Connected to database successfully");
     })
     .catch((err) => {
-      console.log(err);
+      throw new Error(err);
     });
 };

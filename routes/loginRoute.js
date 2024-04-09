@@ -77,6 +77,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
+// LOGIN
 router.post("/login", async (req, res) => {
   let { email, password } = req.body;
   let user = await User.find({ email, password });

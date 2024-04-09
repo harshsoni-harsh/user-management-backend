@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const dbConnect = require("./config/dbConnect");
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Database connection was successful");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+dbConnect();
 
 const seedUsers = [
+  {
+    name: "Admin",
+    role: "Management",
+    email: "admin@gmail.com",
+    password: "admin",
+  },
   {
     name: "Lorem Ipsum",
     role: "Management",

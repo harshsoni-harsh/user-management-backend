@@ -1,9 +1,9 @@
 const express = require("express");
-
 const userRoutes = require("./routes/userRoutes");
 const loginRoute = require("./routes/loginRoute");
 const swaggerDocs = require("./config/swagger");
 const connectDB = require("./config/dbConnect");
+require("dotenv").config({path: '.env.local'});
 
 const app = express();
 app.use(express.json());
@@ -25,6 +25,8 @@ connectDB()
       console.log("Error:", e);
     }
   })
-  .catch(() => {
-    console.log("Invalid database credentials");
+  .catch((e) => {
+    console.error(e);
   });
+
+module.exports = app
