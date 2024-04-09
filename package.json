@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.0",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon --env-file=.env.local ./app.js",
+    "start": "node --env-file=.env.local ./app.js",
+    "seed": "node --env-file=.env.local ./seed.js"
+  }
+}
