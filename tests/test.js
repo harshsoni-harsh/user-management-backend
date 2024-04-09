@@ -56,6 +56,7 @@ describe("User management API", function () {
             done(err);
           } else {
             res.should.have.status(401);
+            res.text.should.be.equal("Invalid credentials");
             done();
           }
         });

@@ -82,7 +82,7 @@ const User = require("../models/user");
 router.post("/login", async (req, res) => {
   let { email, password } = req.body;
   let user = await User.findOne({ email });
-  if (user.password) {
+  if (user) {
     let correctPassword = await bcrypt.compare(password, user.password);
     if (correctPassword) {
       let jwtToken = jwt.sign({ email }, process.env.JWTSECRET);
