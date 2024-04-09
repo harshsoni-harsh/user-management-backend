@@ -56,7 +56,7 @@ This project aims to assess someone's basic backend development skills by implem
 
 ### Setting Up Environment Variables
 
-Create a `.env` file in the root directory of the project and add the following environment variables:
+Create a `.env.local` file in the root directory of the project and add the following environment variables:
 
 ```
 MONGODB_URI=<your-mongodb-uri>
@@ -76,6 +76,20 @@ The API will be available at `http://localhost:3000`.
 ## API Documentation
 
 The API endpoints are documented using Swagger. To view the documentation, open your web browser and navigate to `http://localhost:3000/docs`.
+
+### Example Screenshots
+
+- **npm run test**
+
+  ![test-results](images/test-results.png)
+
+- **GET /docs**
+
+  ![Docs](images/docs-page.png)
+
+- **POST /login**
+
+  ![Login](images/login-result.png)
 
 ## Testing
 
