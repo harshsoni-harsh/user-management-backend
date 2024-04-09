@@ -7,13 +7,19 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
+    "chai": "^1.10.0",
+    "chai-http": "^4.4.0",
+    "dotenv": "^16.4.5",
+    "jsonpath": "^1.1.1",
+    "mocha": "^10.4.0",
     "nodemon": "^3.1.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },
   "scripts": {
-    "dev": "nodemon --env-file=.env.local ./app.js",
-    "start": "node --env-file=.env.local ./app.js",
-    "seed": "node --env-file=.env.local ./seed.js"
+    "test": "node ./seed.js && mocha tests/**/*.js --timeout 10000",
+    "dev": "nodemon ./app.js",
+    "start": "node ./app.js",
+    "seed": "node ./seed.js"
   }
 }
