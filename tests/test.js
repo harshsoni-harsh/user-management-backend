@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 chai.should();
 
 describe("User management API", function () {
-  let user;
+  let user, jwtToken;
 
   // Unknown route
   describe("GET /random", () => {
@@ -29,20 +29,18 @@ describe("User management API", function () {
   // Login route
   describe("POST /login", () => {
     // On providing correct credentials
-    it("should return a status code 200 and jwtToken on successful login", function (done) {
-      chai
-        .request(app)
-        .post("/login")
-        .send({ email: "admin@gmail.com", password: "admin" })
-        .end((err, res) => {
-          if (err) {
-            done(err);
-          } else {
-            res.should.have.status(200);
-            res.body.should.have.property("jwtToken");
-            done();
-          }
-        });
+    it("should return a status code 200 and jwtToken on successful login", async function () {
+      try {
+        const res = await chai
+          .request(app)
+          .post("/login")
+          .send({ email: "jane@xyz.com", password: "default" });
+        chai.expect(res).to.have.status(200);
+        chai.expect(res.body).to.have.property("jwtToken");
+        jwtToken = res.body.jwtToken
+      } catch (err) {
+        throw err;
+      }
     });
 
     // on providing wrong credentials
@@ -71,10 +69,7 @@ describe("User management API", function () {
         const res = await chai
           .request(app)
           .get("/users")
-          .set(
-            "Authorization",
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-          );
+          .set("Authorization", `Bearer ${jwtToken}`);
         chai.expect(res).to.have.status(200);
         chai.expect(res.body).to.be.an("array");
         user = res.body[0];
@@ -107,10 +102,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .post("/user")
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .send({
           userDetails: {
             name: "person",
@@ -134,10 +126,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .post("/user")
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .send({
           userDetails: {
             name: "person",
@@ -161,10 +150,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .post("/user")
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
@@ -184,10 +170,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .get(`/user/${user._id}`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
@@ -204,10 +187,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .get(`/user/random`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
@@ -227,10 +207,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .patch(`/user/${user._id}`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .send({
           userDetails: {
             name: "TestPerson",
@@ -252,10 +229,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .patch(`/user/${user._id}`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
@@ -272,10 +246,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .patch(`/user/random`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .send({
           userDetails: {
             name: "TestPerson",
@@ -300,10 +271,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .delete(`/user/${user._id}`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
@@ -320,10 +288,7 @@ describe("User management API", function () {
       chai
         .request(app)
         .get(`/user/random`)
-        .set(
-          "Authorization",
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAeHl6LmNvbSIsImlhdCI6MTcxMjY2OTY5OH0._shATjZ7MTAvB2qWIOUhpkHEyFSz2lPQrCdbp8azcPY"
-        )
+        .set("Authorization", `Bearer ${jwtToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
