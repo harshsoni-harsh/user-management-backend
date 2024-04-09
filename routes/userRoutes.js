@@ -195,15 +195,15 @@ router.patch("/user/:id", authenticateToken, async (req, res) => {
   if (!userDetails) {
     res.status(400).send("Please enter userDetails");
   } else {
-    const { name, role, email, password } = userDetails;
-    let user = await User.findOneAndUpdate(
-      { _id: id },
-      { name, role, email, password }
-    );
-    if (!user) {
-      res.status(404).send("User not found");
-    } else {
+    try {
+      const { name, role, email, password } = userDetails;
+      let user = await User.findOneAndUpdate(
+        { _id: id },
+        { name, role, email, password }
+      );
       res.send("User details updated successfully");
+    } catch {
+      res.status(404).send("User not found");
     }
   }
 });
