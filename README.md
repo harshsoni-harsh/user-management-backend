@@ -13,8 +13,6 @@ This API provides functionality for managing users, including registration, auth
   - [Starting the Server](#starting-the-server)
 - [API Documentation](#api-documentation)
 - [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
